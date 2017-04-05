@@ -1,26 +1,11 @@
-const querystring = require('querystring');
-const fs = require('fs');
-const url = require('url');
-const collect = require('./collect.js');
+const querystring = require('querystring'),
+			   fs = require('fs'),
+			  url = require('url'),
+	 	  collect = require('./collect.js'),
+		  Options = require('./Options.js');
 
-
-const Options = function(){
-	this.protocol = 'http:';
-	this.hostname = 'e-hentai.org';
-	this.port = 80;
-	this.path = '/g/576886/8938d6a3f2/';
-	this.method = 'GET';
-	this.headers = {
-		'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-		'accept-language':'zh-CN,zh;q=0.8',
-		'cache-control':'no-cache',
-		'cookie':'__cfduid=db0c14340ddf86e115e8ba245e6a2b1911491145567',
-		'pragma':'no-cache',
-		'upgrade-insecure-requests':1,
-		'user-agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36'
-	};
-};
-let options = new Options();
+let hostname = 'e-hentai.org';
+let options = new Options(hostname, '/g/576886/8938d6a3f2/');
 
 
 // get every list page, totally 13 pages.
@@ -46,8 +31,7 @@ for(let p = 0; p < 13; p++){
 }
 let count = 0;
 function getDetailPage(detailLink){
-	let detailOps = new Options();
-	detailOps.path = detailLink.split(detailOps.hostname).pop();
+	let detailOps = new Options(hostname, detailLink.split(detailOps.hostname).pop());
 
 	collect.construct(detailOps, function(err, window, $){
 		if(err) throw err;
